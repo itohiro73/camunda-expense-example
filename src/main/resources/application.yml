@@ -1,0 +1,8 @@
+camunda.bpm:
+  admin-user:
+    id: demo
+    password: demo
+    firstName: デモ
+    lastName: ユーザー
+  filter:
+    create: All tasks
