@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>経費申請フォーム</title>
+</head>
+<body>
+<h2>経費申請フォーム</h2>
+<form role="form" name="expenseForm"
+      class="form-horizontal">
+
+    <p>経費情報を確認の上、承認してください</p>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">経費領収書</label>
+        <div class="form-control-static col-md-10">
+            <input type="hidden" cam-variable-name="expenseReceipt"/>
+            <img src="{{ camForm.variableManager.variable('expenseReceipt').contentUrl }}" class="img-responsive">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">内容</label>
+        <div class="col-md-10">
+            <input cam-variable-name="detail"
+                   type="text"
+                   name="detail"
+                   readonly="true"
+                   class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">金額（円）</label>
+        <div class="col-md-10">
+            <input cam-variable-name="amount"
+                   type="text"
+                   name="amount"
+                   readonly="true"
+                   class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-2">経費種別</label>
+        <div class="col-md-10">
+            <select cam-variable-name="expenseCategory"
+                    cam-variable-type="String"
+                    name="expenseCategory"
+                    disabled="true"
+                    class="form-control">
+                <option value="travel" label="旅費交通費"/>
+                <option value="meal" label="接待交際費"/>
+                <option value="expendables" label="消耗品"/>
+                <option value="other" label="その他"/>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <label>
+                承認しますか？
+                <select cam-variable-name="approved"
+                        cam-variable-type="Boolean"
+                        id="approved"
+                        name="approved"
+                        class="form-control">
+                    <option value="true" label="承認"/>
+                    <option value="false" label="却下"/>
+                </select>
+            </label>
+        </div>
+    </div>
+
+</form>
+
+</body>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>経費申請フォーム</title>
+</head>
+<body>
+<h2>経費申請フォーム</h2>
+<form role="form" name="expenseForm"
+      class="form-horizontal">
+
+    <div class="form-group">
+        <label class="control-label col-md-4"
+               for="expenseReceiptUpload">領収書のアップロード</label>
+        <div class="col-md-8">
+            <input type="file"
+                   id="expenseReceiptUpload"
+                   cam-variable-name="expenseReceipt"
+                   cam-variable-type="File"
+                   cam-max-filesize="10000000"
+                   class="form-control"/>
+            <div class="help-block">経費の領収書の画像を選択してください</div>
+        </div>
+    </div>
+
+    <script cam-script type="text/form-script">
+            var fileUpload = $('#expenseReceiptUpload');
+            var fileUploadHelpBlock = $('.help-block', fileUpload.parent());
+
+            function flagFileUpload() {
+              var hasFile = fileUpload.get(0).files.length > 0;
+              fileUpload[hasFile ? 'removeClass' : 'addClass']('ng-invalid');
+              fileUploadHelpBlock[hasFile ? 'removeClass' : 'addClass']('error');
+              return hasFile;
+            }
+
+            fileUpload.on('change', function () {
+              flagFileUpload();
+            });
+
+            camForm.on('submit', function(evt) {
+              var hasFile = flagFileUpload();
+
+              // prevent submit if user has not provided a file
+              evt.submitPrevented = !hasFile;
+            });
+
+    </script>
+
+    <div class="form-group">
+        <label class="control-label col-md-4"
+               for="detail">内容</label>
+        <div class="col-md-8">
+            <input cam-variable-name="detail"
+                   cam-variable-type="String"
+                   id="detail"
+                   class="form-control"
+                   type="text"
+                   required />
+            <div class="help">
+                (e.g. 社内懇親会費、共用書籍購入費、等。)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-4"
+               for="amount">金額（円）</label>
+        <div class="col-md-8">
+            <input cam-variable-name="amount"
+                   cam-variable-type="Double"
+                   id="amount"
+                   name="amount"
+                   class="form-control"
+                   type="text"
+                   required />
+            <div class="help">
+                (e.g. 3000.00)
+            </div>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-md-4"
+               for="expenseCategory">経費種別</label>
+        <div class="col-md-8">
+            <select cam-variable-name="expenseCategory"
+                    cam-variable-type="String"
+                    id="expenseCategory"
+                    class="form-control">
+                <option value="travel" label="旅費交通費"/>
+                <option value="meal" label="接待交際費"/>
+                <option value="expendables" label="消耗品"/>
+                <option value="other" label="その他"/>
+            </select>
+        </div>
+    </div>
+
+</form>
+
+</body>

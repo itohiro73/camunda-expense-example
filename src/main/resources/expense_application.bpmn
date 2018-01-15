@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.2">
   <bpmn:collaboration id="Collaboration_052q7bo">
-    <bpmn:participant id="Participant_1qc32v0" name="経費申請" processRef="Process_1" />
+    <bpmn:participant id="Participant_1qc32v0" name="経費申請" processRef="ExpenseApplication" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_1" isExecutable="false">
+  <bpmn:process id="ExpenseApplication" isExecutable="true">
     <bpmn:laneSet>
       <bpmn:lane id="Lane_0612uyg" name="承認者">
         <bpmn:flowNodeRef>EndEvent_09ghuvc</bpmn:flowNodeRef>
@@ -24,14 +24,18 @@
     <bpmn:endEvent id="EndEvent_09ghuvc" name="経費却下">
       <bpmn:incoming>SequenceFlow_0rq06o0</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_0rq06o0" name="いいえ" sourceRef="ExclusiveGateway_0rht7n2" targetRef="EndEvent_09ghuvc" />
-    <bpmn:sequenceFlow id="SequenceFlow_12jg3dz" name="はい" sourceRef="ExclusiveGateway_0rht7n2" targetRef="Task_1lse19e" />
+    <bpmn:sequenceFlow id="SequenceFlow_0rq06o0" name="いいえ" sourceRef="ExclusiveGateway_0rht7n2" targetRef="EndEvent_09ghuvc">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_12jg3dz" name="はい" sourceRef="ExclusiveGateway_0rht7n2" targetRef="Task_1lse19e">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_130nf82" sourceRef="Task_1lse19e" targetRef="Task_0z7k9l9" />
     <bpmn:sequenceFlow id="SequenceFlow_1qviohw" sourceRef="Task_0z7k9l9" targetRef="EndEvent_09tvp54" />
-    <bpmn:startEvent id="StartEvent_1" name="経費申請&#10;フォーム送信&#10;" camunda:formKey="embedded:app:forms/expense-form.html">
+    <bpmn:startEvent id="StartEvent_1" name="経費申請&#10;フォーム送信&#10;" camunda:formKey="embedded:app:forms/apply-form.html">
       <bpmn:outgoing>SequenceFlow_0fdz25u</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_0jsv9q8" name="承認" camunda:formKey="embedded:app:forms/expense-approval.html">
+    <bpmn:userTask id="Task_0jsv9q8" name="承認" camunda:formKey="embedded:app:forms/approve-form.html">
       <bpmn:incoming>SequenceFlow_0fdz25u</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_13fxym8</bpmn:outgoing>
     </bpmn:userTask>
@@ -40,11 +44,11 @@
       <bpmn:outgoing>SequenceFlow_0rq06o0</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_12jg3dz</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Task_1lse19e" name="確認" camunda:formKey="embedded:app:forms/expense-review.html">
+    <bpmn:userTask id="Task_1lse19e" name="確認" camunda:formKey="embedded:app:forms/confirm-form.html">
       <bpmn:incoming>SequenceFlow_12jg3dz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_130nf82</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Task_0z7k9l9" name="経費記録">
+    <bpmn:serviceTask id="Task_0z7k9l9" name="経費記録" camunda:class="sample.service.ExpenseRecorder">
       <bpmn:incoming>SequenceFlow_130nf82</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qviohw</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -116,7 +120,7 @@
         <di:waypoint xsi:type="dc:Point" x="457" y="176" />
         <di:waypoint xsi:type="dc:Point" x="457" y="208" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="462" y="147.25" width="22" height="13" />
+          <dc:Bounds x="423" y="152" width="22" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_0ap8gja_di" bpmnElement="Task_1lse19e">
